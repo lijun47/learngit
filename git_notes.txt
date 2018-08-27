@@ -1,0 +1,89 @@
+
+一、简介：
+Git是分布式版本控制系统
+	分布式版本控制系统根本没有“中央服务器”，每个人的电脑上都是一个完整的版本库，
+	分布式版本控制系统通常也有一台充当“中央服务器”的电脑，但这个服务器的作用仅仅是用来方便“交换”大家的修改，
+	没有它大家也一样干活，只是交换修改不方便而已。
+	不需要联网，安全性高，
+	
+CVS及SVN都是集中式的版本控制系统		
+	版本库是集中存放在中央服务器的，而干活的时候，用的都是自己的电脑，
+	所以要先从中央服务器取得最新的版本，然后开始干活，干完活了，再把自己的活推送给中央服务器。
+	必须联网才能工作,
+
+二、命令使用：
+
+每个机器都必须自报家门：你的名字和Email地址
+git config --global user.name	lijun
+git config --global user.email	574747217@qq.com
+
+创建版本库repository：
+#把这个目录变成Git可以管理的仓库
+mkdir project && cd project
+git init
+
+#把文件添加到仓库	
+git add
+
+#把文件提交到仓库
+git commit  -m "说明注释"
+
+#查看文件修改内容：
+git diff readme.txt
+
+git status
+
+#查看仓库提交历史记录：
+git log 
+
+#版本回退：commit_id没必要写全，前几位就可以了，Git会自动去找
+git reset --hard commit_id
+
+#每一次命令的记录：
+git reflog
+
+--工作区：就是你在电脑里能看到的目录
+--版本库：工作区有一个隐藏目录.git，这个不算工作区，而是Git的版本库。
+	版本库里包括暂存区，还有自动创建的第一个分支master，以及指向master的一个指针叫HEAD。
+	git add把文件添加进去，实际上就是把文件修改添加到暂存区；
+	git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
+	
+场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout -- file。
+
+场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，
+	   第一步用命令git reset HEAD <file>，就回到了场景1，第二步按场景1操作。
+
+场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。	
+	
+#删除文件：先手动删除文件，然后使用git rm <file>和git add<file>效果是一样的。
+git rm 	
+	
+
+三、远程仓库：
+
+Quick setup — if you’ve done this kind of thing before
+https://github.com/lijun47/learngit.git
+We recommend every repository include a README, LICENSE, and .gitignore.
+
+…or create a new repository on the command line
+echo "# learngit" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/lijun47/learngit.git
+git push -u origin master
+
+…or push an existing repository from the command line
+git remote add origin https://github.com/lijun47/learngit.git
+
+#把本地库的内容推送到远程，用git push命令，实际上是把当前分支master推送到远程。
+#由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送到远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。
+git push -u origin master
+
+#更换成ssh方式推送到远程仓库：
+git remote -v
+git remote rm origin
+git remote add origin git@github.com:lijun47/learngit.git
+git push origin master
+
+git clone https://url
